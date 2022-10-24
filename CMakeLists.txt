@@ -7,6 +7,8 @@ project(${PROJECT_NAME})
 
 set(vector VectorMain)
 set(vectorlib VectorLib)
+set(matrixlib MatrixLib)
+set(matrix MatrixMain)
 
 set(CMAKE_CONFIGURATION_TYPES "Debug;Release" CACHE STRING "Configs" FORCE)
 if (NOT CMAKE_BUILD_TYPE)
@@ -14,9 +16,10 @@ if (NOT CMAKE_BUILD_TYPE)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/VectorLib)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/MatrixLib)
 
 add_subdirectory(Vector)
 add_subdirectory(VectorLib)
-
-
+add_subdirectory(Matrix)
+add_subdirectory(MatrixLib)
 

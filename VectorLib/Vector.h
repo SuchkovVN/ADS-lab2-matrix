@@ -77,7 +77,7 @@ inline TDynamicVector<T>::TDynamicVector(size_t size)
 
   for (size_t i = 0; i < sz; i++)
   {
-    pMem[i] = 0;
+    pMem[i] = 0;  
   }
 }
 
