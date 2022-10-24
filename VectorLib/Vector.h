@@ -15,7 +15,8 @@ protected:
   size_t sz;
   T* pMem;
 public:
-  TDynamicVector(size_t size = 1);
+  TDynamicVector();
+  TDynamicVector(size_t size);
   TDynamicVector(T* arr, size_t s);
   TDynamicVector(const TDynamicVector& v);
   TDynamicVector(TDynamicVector&& v) noexcept;
@@ -39,7 +40,7 @@ public:
 
   TDynamicVector operator+(const TDynamicVector& v);
   TDynamicVector operator-(const TDynamicVector& v);
-  T operator*(const TDynamicVector& v) noexcept(noexcept(T()));
+  T operator*(const TDynamicVector& v);
 
   friend istream& operator>>(istream& istr, TDynamicVector& v) 
   {
@@ -67,18 +68,23 @@ public:
 
 };
 
+
+template<typename T>
+inline TDynamicVector<T>::TDynamicVector()
+{
+  sz = 1;
+  pMem = new T();
+
+}
+
 template<typename T>
 inline TDynamicVector<T>::TDynamicVector(size_t size)
 {
   if(size <= 0) throw "Error: dynamicvector size <= 0"; 
   
   sz = size;
-  pMem = new T[sz]; 
+  pMem = new T[sz](); 
 
-  for (size_t i = 0; i < sz; i++)
-  {
-    pMem[i] = 0;  
-  }
 }
 
 template<typename T>
@@ -100,6 +106,7 @@ inline TDynamicVector<T>::TDynamicVector(const TDynamicVector& v)
 
   sz = v.sz;
   pMem = new T[sz];
+
 
   copy(v.pMem, v.pMem + sz, pMem);
 }
@@ -194,11 +201,13 @@ inline const T& TDynamicVector<T>::at(size_t indx) const
 template<typename T>
 inline bool TDynamicVector<T>::operator==(const TDynamicVector& v) const noexcept
 {
-  if (sz != v.sz) return false;
+  if (sz != v.sz) 
+    return false;
 
-  for (size_t i = 0; sz; i++)
+  for (size_t i = 0;i < sz; i++)
   {
-    if (pMem[i] != v.pMem[i]) return false;
+    if (pMem[i] != v.pMem[i]) 
+      return false;
   }
 
   return true;
@@ -278,7 +287,7 @@ inline TDynamicVector<T> TDynamicVector<T>::operator-(const TDynamicVector& v)
 }
 
 template<typename T>
-inline T TDynamicVector<T>::operator*(const TDynamicVector& v) noexcept(noexcept(T()))
+inline T TDynamicVector<T>::operator*(const TDynamicVector<T>& v) 
 {
   if (sz != v.sz) throw "Error: vectors disparity";
 
@@ -286,7 +295,7 @@ inline T TDynamicVector<T>::operator*(const TDynamicVector& v) noexcept(noexcept
 
   for (size_t i = 0; i < sz; i++)
   {
-    temp += this[i] * v[i];
+    temp += pMem[i] * v[i];
   }
 
   return temp;

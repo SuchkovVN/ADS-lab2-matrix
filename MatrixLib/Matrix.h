@@ -1,17 +1,22 @@
 #pragma once
 #include "Vector.h"
 
+const int MAX_VECTOR_SIZE = 100000000;
+const int MAX_MATRIX_SIZE = 10000;
+
 template<typename T>
-class TDynamicMatrix : private TDynamicVector<TDynamicVector<T>>
+class TDynamicMatrix : public TDynamicVector<TDynamicVector<T>>
 {
   using TDynamicVector<TDynamicVector<T>>::pMem;
   using TDynamicVector<TDynamicVector<T>>::sz;
 public:
-  TDynamicMatrix(size_t size = 1);
+  TDynamicMatrix();
+  TDynamicMatrix(size_t size);
   TDynamicMatrix(const TDynamicMatrix& m);
-  TDynamicMatrix& operator=(const TDynamicMatrix<T>& m);
+  // TDynamicMatrix& operator=(const TDynamicMatrix<T>& m);
 
   using TDynamicVector<TDynamicVector<T>>::operator[];
+  
 
   bool operator==(const TDynamicMatrix& m) const noexcept;
   bool operator!=(const TDynamicMatrix& m) const noexcept;
@@ -49,6 +54,7 @@ public:
       {
         ostr << v[i][j] << ' ';
       }
+      if (i != v.size() - 1) ostr << '\n';
     }
     ostr << ')';
 
@@ -56,6 +62,12 @@ public:
   }
 
 };
+
+template<typename T>
+inline TDynamicMatrix<T>::TDynamicMatrix(): TDynamicVector<TDynamicVector<T>>()
+{
+}
+
 
 template<typename T>
 inline TDynamicMatrix<T>::TDynamicMatrix(size_t size) : TDynamicVector<TDynamicVector<T>>(size) 
@@ -66,7 +78,34 @@ inline TDynamicMatrix<T>::TDynamicMatrix(size_t size) : TDynamicVector<TDynamicV
 }
 
 template<typename T>
-TDynamicMatrix<T>::TDynamicMatrix(const TDynamicMatrix<T>& m) : TDynamicVector<TDynamicVector<T>>(m.pMem) {}
+TDynamicMatrix<T>::TDynamicMatrix(const TDynamicMatrix<T>& m): TDynamicVector<TDynamicVector<T>>(m)
+{
+  // TDynamicVector<TDynamicVector<T>> temp(m.pMem);
+}
+
+// template<typename T>
+// TDynamicMatrix<T>& TDynamicMatrix<T>::operator=(const TDynamicMatrix<T>& m)
+// {
+//   if (&m == this) return *this;
+
+//   if (sz == m.sz)
+//   {
+//     for (size_t i = 0; i < sz; i++)
+//     {
+//       pMem[i] = m.pMem[i];
+//     }
+//     return *this;
+//   }
+
+//   delete [] pMem;
+//   sz = m.sz;
+
+//   for (size_t i = 0; i < sz; i++)
+//     {
+//       pMem[i] = m.pMem[i];
+//     }
+//   return *this;
+// }
 
 template<typename T>
 bool TDynamicMatrix<T>::operator==(const TDynamicMatrix<T>& m) const noexcept
